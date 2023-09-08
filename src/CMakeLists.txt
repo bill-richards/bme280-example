@@ -1,6 +1,0 @@
-FILE(GLOB_RECURSE SOURCES ${CMAKE_SOURCE_DIR}/src/*.cpp)
-
-idf_component_register(
-    SRCS ${SOURCES}
-    INCLUDE_DIRS include
-)
