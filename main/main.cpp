@@ -6,24 +6,27 @@
 #include <bme_controller.h>
 #include <ssd1306_controller.h>
 
-typedef gsdc_examples::bme::BmeController BmeController;
+typedef gsdc_bme280::BmeController BmeController;
 typedef gsdc_oled::SSD1306Controller OledController;
 typedef gsdc_oled::SPEED SCROLL_SPEED;
 typedef gsdc_oled::DISPLAY_POSITION DISPLAY_POSITION;
 
 const char * MAIN_TAG = "main";
 
+const uint16_t IIC_DATA_PIN = 26;
+const uint16_t IIC_CLOCK_PIN = 25;
+
 extern "C" void app_main(void)
 {
-    BmeController Bme_Control;
-    if(!Bme_Control.Initialize())
+    BmeController Bme_Controller;
+    if(!Bme_Controller.Initialize(IIC_DATA_PIN, IIC_CLOCK_PIN))
     {
         ESP_LOGE(MAIN_TAG, "BME280 Sensor is not initialized...");
         return;
     }
 
     OledController Oled_Controller;
-    if(!Oled_Controller.Initialize(false, 26, 25))
+    if(!Oled_Controller.Initialize(false, IIC_DATA_PIN, IIC_CLOCK_PIN))
     {
         ESP_LOGE(MAIN_TAG, "Oled Display is not initialized...");
         return;
@@ -39,10 +42,10 @@ extern "C" void app_main(void)
     TickType_t lastTime = xTaskGetTickCount();
     while(true)
     {
-        Bme_Control.ReadData(bmeData);
+        Bme_Controller.ReadData(bmeData);
         Oled_Controller.HorizontalScrollText(bmeData, DISPLAY_POSITION::CENTER, SCROLL_SPEED::FAST);
         
-        int line_number = 1;
+        int line_number_adjustment = 1;
         pos = strtok_r(bmeData, "|", &saveptr);
         while(pos != NULL)
         {
@@ -56,7 +59,7 @@ extern "C" void app_main(void)
                 sprintf(line, "Press: %1.9s", value);
             }
             pos = strtok_r(saveptr, "|", &saveptr);
-            Oled_Controller.DisplayText(line, DISPLAY_POSITION::CENTER+(line_number++));
+            Oled_Controller.DisplayText(line, DISPLAY_POSITION::CENTER+(line_number_adjustment++));
         }
         vTaskDelayUntil(&lastTime, pdMS_TO_TICKS(5000));
     }
