@@ -6,7 +6,7 @@
 #include <bme_controller.h>
 #include <ssd1306_controller.h>
 
-typedef gsdc_bme280::BmeController BmeController;
+typedef gsdc_sensor::bme280::BmeController BmeController;
 typedef gsdc_oled::SSD1306Controller OledController;
 typedef gsdc_oled::SPEED SCROLL_SPEED;
 typedef gsdc_oled::DISPLAY_POSITION DISPLAY_POSITION;
