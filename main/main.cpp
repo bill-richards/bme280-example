@@ -36,7 +36,7 @@ extern "C" void app_main(void)
     char *bmeData = (char*)calloc(1024, sizeof(char));
     char *saveptr, *inner_pos, *value, *pos;
     char *line = (char*)calloc(OledController::DISPLAY_WIDTH, sizeof(char));
-    const char message[] = "This message scrolls @ SPEED::SLOW. The raw BME Data scrolls @ SPEED::FAST, and is parsed & displayed immediately below";
+    const char message[] = "This message scrolls @ SPEED::SLOW. The raw BME data, which are read every 5 seconds, scroll @ SPEED::FAST; they are parsed & displayed immediately below.";
     Oled_Controller.HorizontalScrollText((char*)message, DISPLAY_POSITION::TOP, SCROLL_SPEED::SLOW, true, true);
     
     TickType_t lastTime = xTaskGetTickCount();
